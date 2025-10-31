@@ -13,7 +13,7 @@ provider:
 functions:
   lista_buckets:
     handler: lista_buckets.lambda_handler
-    memorySize: 1024
+    memorySize: 512
     events:
       - http:
           path: /s3/lista-buckets

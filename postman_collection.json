@@ -1,0 +1,239 @@
+{
+  "info": {
+    "name": "API S3 - Lambda Functions",
+    "description": "Colección para probar las funciones Lambda de S3 en los stages dev, test y prod",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "DEV",
+      "item": [
+        {
+          "name": "1. Listar Buckets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/lista-buckets",
+              "protocol": "https",
+              "host": ["9bfm4zr7zi", "execute-api", "us-east-1", "amazonaws", "com"],
+              "path": ["dev", "s3", "lista-buckets"]
+            }
+          }
+        },
+        {
+          "name": "2. Crear Bucket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bucket_name\": \"mi-bucket-dev-20251101\"\n}"
+            },
+            "url": {
+              "raw": "https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/crear",
+              "protocol": "https",
+              "host": ["9bfm4zr7zi", "execute-api", "us-east-1", "amazonaws", "com"],
+              "path": ["dev", "s3", "bucket", "crear"]
+            }
+          }
+        },
+        {
+          "name": "3. Crear Directorio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bucket_name\": \"mi-bucket-dev-20251101\",\n  \"directorio\": \"documentos\"\n}"
+            },
+            "url": {
+              "raw": "https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/crear-directorio",
+              "protocol": "https",
+              "host": ["9bfm4zr7zi", "execute-api", "us-east-1", "amazonaws", "com"],
+              "path": ["dev", "s3", "bucket", "crear-directorio"]
+            }
+          }
+        },
+        {
+          "name": "4. Subir Archivo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bucket_name\": \"mi-bucket-dev-20251101\",\n  \"directorio\": \"documentos\",\n  \"filename\": \"test.txt\",\n  \"file_content\": \"SG9sYSBNdW5kbyBkZXNkZSBMYW1iZGEgeSBTMyE=\"\n}"
+            },
+            "url": {
+              "raw": "https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/subir-archivo",
+              "protocol": "https",
+              "host": ["9bfm4zr7zi", "execute-api", "us-east-1", "amazonaws", "com"],
+              "path": ["dev", "s3", "bucket", "subir-archivo"]
+            }
+          }
+        },
+        {
+          "name": "5. Listar Objetos del Bucket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bucket_name\": \"mi-bucket-dev-20251101\"\n}"
+            },
+            "url": {
+              "raw": "https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/lista-objetos",
+              "protocol": "https",
+              "host": ["9bfm4zr7zi", "execute-api", "us-east-1", "amazonaws", "com"],
+              "path": ["dev", "s3", "bucket", "lista-objetos"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TEST",
+      "item": [
+        {
+          "name": "1. Crear Bucket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bucket_name\": \"mi-bucket-test-20251101\"\n}"
+            },
+            "url": {
+              "raw": "https://t4ccvldmhi.execute-api.us-east-1.amazonaws.com/test/s3/bucket/crear",
+              "protocol": "https",
+              "host": ["t4ccvldmhi", "execute-api", "us-east-1", "amazonaws", "com"],
+              "path": ["test", "s3", "bucket", "crear"]
+            }
+          }
+        },
+        {
+          "name": "2. Crear Directorio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bucket_name\": \"mi-bucket-test-20251101\",\n  \"directorio\": \"imagenes\"\n}"
+            },
+            "url": {
+              "raw": "https://t4ccvldmhi.execute-api.us-east-1.amazonaws.com/test/s3/bucket/crear-directorio",
+              "protocol": "https",
+              "host": ["t4ccvldmhi", "execute-api", "us-east-1", "amazonaws", "com"],
+              "path": ["test", "s3", "bucket", "crear-directorio"]
+            }
+          }
+        },
+        {
+          "name": "3. Listar Buckets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://t4ccvldmhi.execute-api.us-east-1.amazonaws.com/test/s3/lista-buckets",
+              "protocol": "https",
+              "host": ["t4ccvldmhi", "execute-api", "us-east-1", "amazonaws", "com"],
+              "path": ["test", "s3", "lista-buckets"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PROD",
+      "item": [
+        {
+          "name": "1. Crear Bucket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bucket_name\": \"mi-bucket-prod-20251101\"\n}"
+            },
+            "url": {
+              "raw": "https://sxzvnx8o0a.execute-api.us-east-1.amazonaws.com/prod/s3/bucket/crear",
+              "protocol": "https",
+              "host": ["sxzvnx8o0a", "execute-api", "us-east-1", "amazonaws", "com"],
+              "path": ["prod", "s3", "bucket", "crear"]
+            }
+          }
+        },
+        {
+          "name": "2. Crear Directorio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bucket_name\": \"mi-bucket-prod-20251101\",\n  \"directorio\": \"videos\"\n}"
+            },
+            "url": {
+              "raw": "https://sxzvnx8o0a.execute-api.us-east-1.amazonaws.com/prod/s3/bucket/crear-directorio",
+              "protocol": "https",
+              "host": ["sxzvnx8o0a", "execute-api", "us-east-1", "amazonaws", "com"],
+              "path": ["prod", "s3", "bucket", "crear-directorio"]
+            }
+          }
+        },
+        {
+          "name": "3. Listar Buckets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://sxzvnx8o0a.execute-api.us-east-1.amazonaws.com/prod/s3/lista-buckets",
+              "protocol": "https",
+              "host": ["sxzvnx8o0a", "execute-api", "us-east-1", "amazonaws", "com"],
+              "path": ["prod", "s3", "lista-buckets"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidencias - API REST S3 con AWS Lambda</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .info-box {
+            background-color: #fff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h3 {
+            color: #764ba2;
+            margin-top: 20px;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .endpoint {
+            background-color: #e7f3ff;
+            padding: 10px;
+            border-left: 4px solid #0066cc;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        .method-get {
+            background-color: #61affe;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.85em;
+        }
+        .method-post {
+            background-color: #49cc90;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.85em;
+        }
+        .stage-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .stage-dev {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .stage-test {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .stage-prod {
+            background-color: #dc3545;
+            color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        table th {
+            background-color: #667eea;
+            color: white;
+        }
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li:before {
+            content: "✅ ";
+            margin-right: 10px;
+        }
+        .image-placeholder {
+            background-color: #e9ecef;
+            border: 2px dashed #6c757d;
+            padding: 40px;
+            text-align: center;
+            margin: 15px 0;
+            border-radius: 5px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .curl-command {
+            background-color: #1e1e1e;
+            color: #dcdcdc;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .response-json {
+            background-color: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 3px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 EVIDENCIAS - API REST S3</h1>
+        <p style="font-size: 1.2em; margin: 10px 0 0 0;">AWS Lambda + Serverless Framework</p>
+    </div>
+
+    <div class="info-box">
+        <table style="border: none;">
+            <tr style="background: none;">
+                <td style="border: none; font-weight: bold; width: 150px;">📚 Curso:</td>
+                <td style="border: none;">Cloud Computing</td>
+                <td style="border: none; font-weight: bold; width: 150px;">📅 Fecha:</td>
+                <td style="border: none;">01 de Noviembre 2025</td>
+            </tr>
+            <tr style="background: none;">
+                <td style="border: none; font-weight: bold;">📝 Semana:</td>
+                <td style="border: none;">11</td>
+                <td style="border: none; font-weight: bold;">👤 Estudiante:</td>
+                <td style="border: none;">Juan Velo</td>
+            </tr>
+            <tr style="background: none;">
+                <td style="border: none; font-weight: bold;">🎯 Tema:</td>
+                <td colspan="3" style="border: none;">Gestión de S3 con AWS Lambda, API Gateway y Serverless Framework</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>🎯 Objetivos Completados</h2>
+        <ul class="checklist">
+            <li>Modificar serverless.yml para agregar 3 funciones Lambda</li>
+            <li>Función: Crear un nuevo bucket en S3</li>
+            <li>Función: Crear un directorio en un bucket existente</li>
+            <li>Función: Subir un archivo a un directorio de un bucket</li>
+            <li>Desplegar en el stage de DEV</li>
+            <li>Desplegar en el stage de TEST</li>
+            <li>Desplegar en el stage de PROD</li>
+            <li>Probar el API REST desde Linux con curl</li>
+            <li>Probar el API REST con Postman</li>
+            <li>Documentar evidencias con screenshots</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🚀 Despliegues Realizados</h2>
+        
+        <h3><span class="stage-badge stage-dev">DEV</span> Stage de Desarrollo</h3>
+        <div class="code-block">
+✔ Service deployed to stack api-s3-dev (43s)
+
+endpoints:
+  GET  - https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/lista-buckets
+  POST - https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/lista-objetos
+  POST - https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/crear
+  POST - https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/crear-directorio
+  POST - https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/subir-archivo
+
+functions:
+  lista_buckets: api-s3-dev-lista_buckets (2.7 kB)
+  lista_objetos_bucket: api-s3-dev-lista_objetos_bucket (2.7 kB)
+  crear_bucket: api-s3-dev-crear_bucket (2.7 kB)
+  crear_directorio: api-s3-dev-crear_directorio (2.7 kB)
+  subir_archivo: api-s3-dev-subir_archivo (2.7 kB)
+        </div>
+
+        <h3><span class="stage-badge stage-test">TEST</span> Stage de Pruebas</h3>
+        <div class="code-block">
+✔ Service deployed to stack api-s3-test (43s)
+
+endpoints:
+  GET  - https://t4ccvldmhi.execute-api.us-east-1.amazonaws.com/test/s3/lista-buckets
+  POST - https://t4ccvldmhi.execute-api.us-east-1.amazonaws.com/test/s3/bucket/lista-objetos
+  POST - https://t4ccvldmhi.execute-api.us-east-1.amazonaws.com/test/s3/bucket/crear
+  POST - https://t4ccvldmhi.execute-api.us-east-1.amazonaws.com/test/s3/bucket/crear-directorio
+  POST - https://t4ccvldmhi.execute-api.us-east-1.amazonaws.com/test/s3/bucket/subir-archivo
+
+functions:
+  lista_buckets: api-s3-test-lista_buckets (2.7 kB)
+  lista_objetos_bucket: api-s3-test-lista_objetos_bucket (2.7 kB)
+  crear_bucket: api-s3-test-crear_bucket (2.7 kB)
+  crear_directorio: api-s3-test-crear_directorio (2.7 kB)
+  subir_archivo: api-s3-test-subir_archivo (2.7 kB)
+        </div>
+
+        <h3><span class="stage-badge stage-prod">PROD</span> Stage de Producción</h3>
+        <div class="code-block">
+✔ Service deployed to stack api-s3-prod (43s)
+
+endpoints:
+  GET  - https://sxzvnx8o0a.execute-api.us-east-1.amazonaws.com/prod/s3/lista-buckets
+  POST - https://sxzvnx8o0a.execute-api.us-east-1.amazonaws.com/prod/s3/bucket/lista-objetos
+  POST - https://sxzvnx8o0a.execute-api.us-east-1.amazonaws.com/prod/s3/bucket/crear
+  POST - https://sxzvnx8o0a.execute-api.us-east-1.amazonaws.com/prod/s3/bucket/crear-directorio
+  POST - https://sxzvnx8o0a.execute-api.us-east-1.amazonaws.com/prod/s3/bucket/subir-archivo
+
+functions:
+  lista_buckets: api-s3-prod-lista_buckets (2.7 kB)
+  lista_objetos_bucket: api-s3-prod-lista_objetos_bucket (2.7 kB)
+  crear_bucket: api-s3-prod-crear_bucket (2.7 kB)
+  crear_directorio: api-s3-prod-crear_directorio (2.7 kB)
+  subir_archivo: api-s3-prod-subir_archivo (2.7 kB)
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Terminal de Linux con los despliegues exitosos
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📡 Endpoints del API</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Stage</th>
+                    <th>Método</th>
+                    <th>Endpoint</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="stage-badge stage-dev">DEV</span></td>
+                    <td><span class="method-get">GET</span></td>
+                    <td>/s3/lista-buckets</td>
+                    <td>Listar todos los buckets</td>
+                </tr>
+                <tr>
+                    <td><span class="stage-badge stage-dev">DEV</span></td>
+                    <td><span class="method-post">POST</span></td>
+                    <td>/s3/bucket/crear</td>
+                    <td>Crear un nuevo bucket</td>
+                </tr>
+                <tr>
+                    <td><span class="stage-badge stage-dev">DEV</span></td>
+                    <td><span class="method-post">POST</span></td>
+                    <td>/s3/bucket/crear-directorio</td>
+                    <td>Crear un directorio en bucket</td>
+                </tr>
+                <tr>
+                    <td><span class="stage-badge stage-dev">DEV</span></td>
+                    <td><span class="method-post">POST</span></td>
+                    <td>/s3/bucket/subir-archivo</td>
+                    <td>Subir archivo a directorio</td>
+                </tr>
+                <tr>
+                    <td><span class="stage-badge stage-dev">DEV</span></td>
+                    <td><span class="method-post">POST</span></td>
+                    <td>/s3/bucket/lista-objetos</td>
+                    <td>Listar objetos de un bucket</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="font-style: italic; color: #6c757d;">* Los mismos endpoints están disponibles en TEST y PROD con diferentes URLs base</p>
+    </div>
+
+    <div class="section">
+        <h2>💻 Pruebas con CURL en Linux (Ubuntu 22.04)</h2>
+        
+        <h3>1️⃣ Crear Bucket</h3>
+        <div class="curl-command">
+$ curl -X POST https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/crear \
+  -H "Content-Type: application/json" \
+  -d '{"bucket_name":"mi-bucket-dev-20251101"}'
+        </div>
+        <p><strong>Respuesta:</strong></p>
+        <div class="response-json">
+{"message": "Bucket mi-bucket-dev-20251101 creado exitosamente"}
+        </div>
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Terminal Linux - Creación de bucket con curl
+        </div>
+
+        <h3>2️⃣ Crear Directorio</h3>
+        <div class="curl-command">
+$ curl -X POST https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/crear-directorio \
+  -H "Content-Type: application/json" \
+  -d '{"bucket_name":"mi-bucket-dev-20251101","directorio":"documentos"}'
+        </div>
+        <p><strong>Respuesta:</strong></p>
+        <div class="response-json">
+{"message": "Directorio documentos creado en mi-bucket-dev-20251101"}
+        </div>
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Terminal Linux - Creación de directorio con curl
+        </div>
+
+        <h3>3️⃣ Subir Archivo</h3>
+        <div class="curl-command">
+$ FILE_CONTENT=$(echo "Hola Mundo desde Lambda y S3!" | base64)
+$ curl -X POST https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/subir-archivo \
+  -H "Content-Type: application/json" \
+  -d "{\"bucket_name\":\"mi-bucket-dev-20251101\",\"directorio\":\"documentos\",\"filename\":\"test.txt\",\"file_content\":\"$FILE_CONTENT\"}"
+        </div>
+        <p><strong>Respuesta:</strong></p>
+        <div class="response-json">
+{"message": "Archivo test.txt subido a documentos en mi-bucket-dev-20251101"}
+        </div>
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Terminal Linux - Subida de archivo con curl
+        </div>
+
+        <h3>4️⃣ Listar Objetos del Bucket</h3>
+        <div class="curl-command">
+$ curl -X POST https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/bucket/lista-objetos \
+  -H "Content-Type: application/json" \
+  -d '{"bucket_name":"mi-bucket-dev-20251101"}'
+        </div>
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Terminal Linux - Listado de objetos con curl
+        </div>
+
+        <h3>5️⃣ Listar Todos los Buckets</h3>
+        <div class="curl-command">
+$ curl -X GET https://9bfm4zr7zi.execute-api.us-east-1.amazonaws.com/dev/s3/lista-buckets
+        </div>
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Terminal Linux - Listado de buckets con curl
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📱 Pruebas con Postman</h2>
+        
+        <h3>Configuración de Postman</h3>
+        <p>Se importó la colección <code>postman_collection.json</code> con las siguientes carpetas:</p>
+        <ul>
+            <li>📁 <strong>DEV</strong> - 5 peticiones</li>
+            <li>📁 <strong>TEST</strong> - 3 peticiones</li>
+            <li>📁 <strong>PROD</strong> - 3 peticiones</li>
+        </ul>
+
+        <h3>Evidencias de Ejecución en Postman</h3>
+        
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Postman - Colección importada con estructura de carpetas
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Postman - Crear Bucket (DEV) - Request y Response
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Postman - Crear Directorio (DEV) - Request y Response
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Postman - Subir Archivo (DEV) - Request y Response
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Postman - Listar Objetos (DEV) - Request y Response
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Postman - Listar Buckets (DEV) - Request y Response
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Postman - Pruebas en stage TEST
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: Postman - Pruebas en stage PROD
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>☁️ Evidencias en AWS Console</h2>
+        
+        <h3>AWS Lambda - Funciones Desplegadas</h3>
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: AWS Lambda Console - Lista de funciones (dev, test, prod)
+        </div>
+        
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: AWS Lambda - Detalle de función crear_bucket
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: AWS Lambda - Detalle de función crear_directorio
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: AWS Lambda - Detalle de función subir_archivo
+        </div>
+
+        <h3>API Gateway - APIs REST Creadas</h3>
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: API Gateway - Lista de APIs (api-s3-dev, test, prod)
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: API Gateway - Recursos y métodos del stage DEV
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: API Gateway - Stages configurados
+        </div>
+
+        <h3>AWS S3 - Buckets y Contenido</h3>
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: S3 Console - Lista de buckets creados
+            <br>(mi-bucket-dev-20251101, mi-bucket-test-20251101, mi-bucket-prod-20251101)
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: S3 - Estructura interna del bucket DEV con directorio "documentos"
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: S3 - Contenido del directorio "documentos" con archivo test.txt
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: S3 - Propiedades del archivo test.txt
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: S3 - Bucket TEST con directorio "imagenes"
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: S3 - Bucket PROD con directorio "videos"
+        </div>
+
+        <h3>CloudWatch Logs - Logs de Ejecución</h3>
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: CloudWatch - Log groups de las funciones Lambda
+        </div>
+
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: CloudWatch - Logs de ejecución exitosa
+        </div>
+
+        <h3>CloudFormation Stacks</h3>
+        <div class="image-placeholder">
+            📸 INSERTAR SCREENSHOT: CloudFormation - Stacks creados por Serverless Framework
+            <br>(api-s3-dev, api-s3-test, api-s3-prod)
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📝 Código - serverless.yml</h2>
+        <div class="code-block" style="font-size: 0.85em;">
+org: juanvelo
+service: api-s3
+
+provider:
+  name: aws
+  runtime: python3.13
+  memorySize: 256
+  timeout: 20
+  iam:
+    role: arn:aws:iam::902206004539:role/LabRole
+
+functions:
+  lista_buckets:
+    handler: lista_buckets.lambda_handler
+    memorySize: 512
+    events:
+      - http:
+          path: /s3/lista-buckets
+          method: get
+          cors: true
+          integration: lambda
+
+  lista_objetos_bucket:
+    handler: lista_objetos_bucket.lambda_handler
+    events:
+      - http:
+          path: /s3/bucket/lista-objetos
+          method: post
+          cors: true
+          integration: lambda
+
+  crear_bucket:
+    handler: crear_bucket.lambda_handler
+    events:
+      - http:
+          path: /s3/bucket/crear
+          method: post
+          cors: true
+          integration: lambda
+
+  crear_directorio:
+    handler: crear_directorio.lambda_handler
+    events:
+      - http:
+          path: /s3/bucket/crear-directorio
+          method: post
+          cors: true
+          integration: lambda
+
+  subir_archivo:
+    handler: subir_archivo.lambda_handler
+    events:
+      - http:
+          path: /s3/bucket/subir-archivo
+          method: post
+          cors: true
+          integration: lambda
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🔧 Especificaciones Técnicas</h2>
+        <table>
+            <tr>
+                <th>Componente</th>
+                <th>Detalle</th>
+            </tr>
+            <tr>
+                <td><strong>Cloud Provider</strong></td>
+                <td>AWS (Amazon Web Services)</td>
+            </tr>
+            <tr>
+                <td><strong>Region</strong></td>
+                <td>us-east-1 (Norte de Virginia)</td>
+            </tr>
+            <tr>
+                <td><strong>Framework</strong></td>
+                <td>Serverless Framework v3.x</td>
+            </tr>
+            <tr>
+                <td><strong>Runtime</strong></td>
+                <td>Python 3.13</td>
+            </tr>
+            <tr>
+                <td><strong>Compute Service</strong></td>
+                <td>AWS Lambda</td>
+            </tr>
+            <tr>
+                <td><strong>API Management</strong></td>
+                <td>API Gateway (REST API)</td>
+            </tr>
+            <tr>
+                <td><strong>Storage Service</strong></td>
+                <td>Amazon S3</td>
+            </tr>
+            <tr>
+                <td><strong>IAM Role</strong></td>
+                <td>LabRole (arn:aws:iam::902206004539:role/LabRole)</td>
+            </tr>
+            <tr>
+                <td><strong>Memory Size</strong></td>
+                <td>256 MB (512 MB para lista_buckets)</td>
+            </tr>
+            <tr>
+                <td><strong>Timeout</strong></td>
+                <td>20 segundos</td>
+            </tr>
+            <tr>
+                <td><strong>CORS</strong></td>
+                <td>Habilitado en todos los endpoints</td>
+            </tr>
+            <tr>
+                <td><strong>Stages</strong></td>
+                <td>dev, test, prod</td>
+            </tr>
+            <tr>
+                <td><strong>Repositorio Git</strong></td>
+                <td>https://github.com/Juan-Velo/cloud_s11_tarea</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>📊 Resumen de Funciones Lambda</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Función</th>
+                    <th>Handler</th>
+                    <th>Método HTTP</th>
+                    <th>Descripción</th>
+                    <th>Parámetros</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>lista_buckets</strong></td>
+                    <td>lista_buckets.lambda_handler</td>
+                    <td><span class="method-get">GET</span></td>
+                    <td>Lista todos los buckets de S3</td>
+                    <td>Ninguno</td>
+                </tr>
+                <tr>
+                    <td><strong>crear_bucket</strong></td>
+                    <td>crear_bucket.lambda_handler</td>
+                    <td><span class="method-post">POST</span></td>
+                    <td>Crea un nuevo bucket en S3</td>
+                    <td>bucket_name</td>
+                </tr>
+                <tr>
+                    <td><strong>crear_directorio</strong></td>
+                    <td>crear_directorio.lambda_handler</td>
+                    <td><span class="method-post">POST</span></td>
+                    <td>Crea un directorio (folder) en un bucket</td>
+                    <td>bucket_name, directorio</td>
+                </tr>
+                <tr>
+                    <td><strong>subir_archivo</strong></td>
+                    <td>subir_archivo.lambda_handler</td>
+                    <td><span class="method-post">POST</span></td>
+                    <td>Sube un archivo a un directorio del bucket</td>
+                    <td>bucket_name, directorio, filename, file_content (base64)</td>
+                </tr>
+                <tr>
+                    <td><strong>lista_objetos_bucket</strong></td>
+                    <td>lista_objetos_bucket.lambda_handler</td>
+                    <td><span class="method-post">POST</span></td>
+                    <td>Lista todos los objetos de un bucket</td>
+                    <td>bucket_name</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>🎓 Conclusiones y Aprendizajes</h2>
+        <ol>
+            <li><strong>Serverless Framework:</strong> Facilita enormemente el despliegue de funciones Lambda y la configuración de API Gateway, reduciendo la configuración manual en la consola de AWS.</li>
+            
+            <li><strong>Separación de Ambientes:</strong> El uso de stages (dev, test, prod) permite tener ambientes aislados para desarrollo, pruebas y producción sin interferencia entre ellos.</li>
+            
+            <li><strong>AWS Lambda y S3:</strong> La integración entre Lambda y S3 permite operaciones serverless sin necesidad de mantener servidores, reduciendo costos operativos.</li>
+            
+            <li><strong>API Gateway:</strong> Proporciona endpoints HTTP seguros y escalables para invocar las funciones Lambda desde cualquier cliente.</li>
+            
+            <li><strong>Infraestructura como Código (IaC):</strong> El archivo serverless.yml actúa como documentación y código de infraestructura, facilitando la reproducibilidad y el control de versiones.</li>
+            
+            <li><strong>CORS:</strong> La habilitación de CORS en todos los endpoints permite que aplicaciones web frontend consuman el API sin problemas de políticas del navegador.</li>
+            
+            <li><strong>Base64 Encoding:</strong> Para subir archivos binarios a través de JSON, se utiliza codificación base64, lo cual es un patrón estándar en APIs REST.</li>
+            
+            <li><strong>Testing:</strong> Se probó exitosamente el API tanto desde Linux (curl) como desde Postman, demostrando la compatibilidad con diferentes clientes.</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>🔗 Archivos Entregables</h2>
+        <ul>
+            <li>✅ <code>serverless.yml</code> - Configuración del framework</li>
+            <li>✅ <code>crear_bucket.py</code> - Función Lambda para crear buckets</li>
+            <li>✅ <code>crear_directorio.py</code> - Función Lambda para crear directorios</li>
+            <li>✅ <code>subir_archivo.py</code> - Función Lambda para subir archivos</li>
+            <li>✅ <code>lista_buckets.py</code> - Función Lambda para listar buckets</li>
+            <li>✅ <code>lista_objetos_bucket.py</code> - Función Lambda para listar objetos</li>
+            <li>✅ <code>comandos_curl.sh</code> - Script bash con comandos curl</li>
+            <li>✅ <code>postman_collection.json</code> - Colección de Postman</li>
+            <li>✅ <code>README_EVIDENCIAS.md</code> - Documentación en Markdown</li>
+            <li>✅ <code>evidencias.html</code> - Este documento con evidencias</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        <h3>📧 Información de Contacto</h3>
+        <p><strong>Estudiante:</strong> Juan Velo</p>
+        <p><strong>Organización:</strong> juanvelo</p>
+        <p><strong>Repositorio:</strong> https://github.com/Juan-Velo/cloud_s11_tarea</p>
+        <p style="margin-top: 20px; font-size: 0.9em;">
+            Cloud Computing - UTEC 2025-2 | Semana 11
+        </p>
+    </div>
+</body>
+</html>
